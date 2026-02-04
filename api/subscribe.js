@@ -1,10 +1,10 @@
-// api/subscribe.js
-import { Client } from "pg";
+// api/subscribe.js  (CommonJS = safest on Vercel)
+const { Client } = require("pg");
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-export default async function handler(req, res) {
-  // CORS (optional, safe)
+module.exports = async (req, res) => {
+  // Basic CORS (harmless + avoids random browser weirdness)
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
   res.setHeader("Access-Control-Allow-Headers", "Content-Type");
@@ -20,18 +20,18 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: "Invalid email" });
     }
 
-    if (!process.env.DATABASE_URL) {
+    const DATABASE_URL = process.env.DATABASE_URL;
+    if (!DATABASE_URL) {
       return res.status(500).json({ error: "Missing DATABASE_URL" });
     }
 
     const client = new Client({
-      connectionString: process.env.DATABASE_URL,
-      ssl: { rejectUnauthorized: false }, // Neon-friendly; sslmode=require is in URL anyway
+      connectionString: DATABASE_URL,
+      ssl: { rejectUnauthorized: false } // OK for Neon
     });
 
     await client.connect();
 
-    // Create table if it doesn't exist (keeps setup friction low)
     await client.query(`
       CREATE TABLE IF NOT EXISTS subscribers (
         id BIGSERIAL PRIMARY KEY,
@@ -41,7 +41,6 @@ export default async function handler(req, res) {
       );
     `);
 
-    // Insert (idempotent)
     await client.query(
       `INSERT INTO subscribers (email, source)
        VALUES ($1, $2)
@@ -54,7 +53,7 @@ export default async function handler(req, res) {
 
     return res.status(200).json({ ok: true });
   } catch (err) {
-    // Don’t leak internals
+    console.error("subscribe error:", err); // <-- this will show in Vercel logs
     return res.status(500).json({ error: "Server error" });
   }
-}
+};
