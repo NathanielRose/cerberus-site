@@ -95,7 +95,8 @@
     }
 
     .hero{
-      position: relative;
+      position: relative; /* allow overlay */
+      isolation: isolate; /* keep layers contained */
       display:grid;
       grid-template-columns: 1fr 420px;
       gap: 48px;
@@ -103,20 +104,27 @@
       margin-top: 56px; /* reduced gap below CERBERUS */
     }
 
-    /* Transparent action potential overlay in hero */
+    /* Transparent action potential signal behind hero content */
     .hero::before{
       content:"";
       position:absolute;
-      top: 22%;
-      left: -10%;
-      right: -10%;
+      left:-10%;
+      right:-10%;
+      top: 38%;
       height: 220px;
+      z-index: 0;
+      pointer-events:none;
       background-image:
-        url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 300" fill="none"><defs><filter id="glow"><feGaussianBlur stdDeviation="4" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs><path d="M0 160 H180 V70 H280 V260 H420 V120 H520 V160 H700 H900 H1200" stroke="black" stroke-opacity="0.18" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/><path d="M0 160 H180 V70 H280 V260 H420 V120 H520 V160 H700 H900 H1200" stroke="white" stroke-opacity="0.35" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" filter="url(%23glow)"/></svg>');
+        url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 300" fill="none"><defs><filter id="g"><feGaussianBlur stdDeviation="4" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs><path d="M0 160 H180 V70 H280 V260 H420 V120 H520 V160 H720 H900 H1200" stroke="black" stroke-opacity="0.10" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/><path d="M0 160 H180 V70 H280 V260 H420 V120 H520 V160 H720 H900 H1200" stroke="white" stroke-opacity="0.28" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" filter="url(%23g)"/></svg>');
       background-repeat:no-repeat;
       background-size:100% 100%;
-      opacity:0.6;
-      pointer-events:none;
+      opacity:0.45;
+    }
+
+    /* Ensure hero content stays above the signal */
+    .hero > *{
+      position: relative;
+      z-index: 1;
     }
 
     .visual img{
@@ -132,10 +140,7 @@
       .visual{order:-1;}
     }
 
-    .hero{
-      max-width: 780px;
-      margin-top: 110px;
-    }
+    /* removed duplicate hero override */
 
     h1{
       margin:0 0 18px;
@@ -282,37 +287,15 @@
     </footer>
   </div>
 
-<script>
-  const form = document.querySelector('.form');
-  const emailEl = document.querySelector('.field');
-
-  form.addEventListener('submit', async (e) => {
-    e.preventDefault();
-
-    const email = emailEl.value.trim();
-    if (!email) return;
-
-    try {
-      const res = await fetch("/api/subscribe", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          email,
-          source: "cerberus-landing"
-        })
-      });
-
-      if (res.ok) {
-        alert("Thanks — you’ll hear from us when we publish or launch.");
-        emailEl.value = "";
-      } else {
-        alert("Something went wrong. Try again.");
-      }
-    } catch (err) {
-      alert("Network error. Try again.");
-    }
-  });
-</script>
-
+  <script>
+    // Tiny demo behavior so the button does something
+    const form = document.querySelector('.form');
+    const email = document.querySelector('.field');
+    form.addEventListener('submit', () => {
+      if (!email.value) return;
+      alert(`Thanks — you’ll hear from us when we publish or launch.`);
+      email.value = '';
+    });
+  </script>
 </body>
 </html>
