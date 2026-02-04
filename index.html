@@ -68,7 +68,8 @@
       min-height:100vh;
       display:flex;
       flex-direction:column;
-      padding: 54px 64px 28px;
+      padding: 48px 64px 24px;
+      overflow:hidden; /* prevent scroll */
     }
 
     header{
@@ -91,14 +92,14 @@
     main{
       flex:1;
       display:flex;
-      align-items:flex-start;
+      align-items:center; /* vertically center hero */
     }
 
     .hero{
       position: relative; /* allow overlay */
       isolation: isolate; /* keep layers contained */
       display:grid;
-      grid-template-columns: 1fr 420px;
+      grid-template-columns: 400px 1fr; /* smaller square column */
       gap: 48px;
       max-width: 1180px;
       margin-top: 56px; /* reduced gap below CERBERUS */
@@ -128,11 +129,14 @@
     }
 
     .visual img{
-      width:100%;
+      width: 360px;              /* reduce square size */
+      max-width: 100%;
+      height: auto;
       border-radius: 18px;
-      box-shadow: 0 30px 80px rgba(0,0,0,.18);
+      box-shadow: 0 24px 56px rgba(0,0,0,.16);
       background: rgba(255,255,255,.25);
       backdrop-filter: blur(6px);
+      image-rendering: auto;     /* avoid pixelation */
     }
 
     @media (max-width: 900px){
@@ -143,7 +147,7 @@
     /* removed duplicate hero override */
 
     h1{
-      margin:0 0 18px;
+      margin:0 0 10px; /* tighter gap above form */
       font-family: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
       font-size: clamp(52px, 5.8vw, 88px);
       line-height: 1.12;
@@ -163,8 +167,9 @@
     .form{
       display:flex;
       flex-direction:column;
-      gap:14px;
+      gap:12px; /* slightly tighter */
       width: 340px;
+      margin-top: 6px; /* pull form closer to headline */
       margin-bottom: 18px;
     }
 
@@ -227,7 +232,9 @@
       text-align:center;
       font-size: 14px;
       color: rgba(0,0,0,.62);
-      padding-top: 14px;
+      padding-top: 12px;
+      margin-top: 0;
+      background: none;
     }
 
     /* Subtle left “panel” shadow like the reference */
@@ -270,15 +277,21 @@
         <div class="visual">
           <img src="https://framerusercontent.com/images/g0QcWrxr87K0ufOxIUFBakwYA8.png" alt="Neurosecurity abstract visualization" />
         </div>
+        <div>
         <h1>NEUROSECURITY<br/>RESEARCH INSTITUTE</h1>
-        <p class="sub" style="text-align:center; margin-top:16px;">A nonprofit research institute securing brain–computer interfaces and neural data.</p>
+        <p class="sub">A nonprofit research institute securing brain–computer interfaces and neural data.</p>
 
-        <form class="form" onsubmit="return false;">
+        
+
+        
+
+                <form class="form" onsubmit="return false;">
           <input class="field" type="email" placeholder="Enter your email" required />
           <button class="btn" type="submit">Follow our research</button>
         </form>
+        </div>
 
-        <p class="helper">Interested in contributing to research?<br/><a href="https://form.typeform.com/to/AD2X5ode" target="_blank" rel="noopener noreferrer">Answer a few questions</a>.</p>
+        <p class="helper" style="margin-top:-6px;">Interested in contributing to research?<br/><a href="https://form.typeform.com/to/AD2X5ode" target="_blank" rel="noopener noreferrer">Answer a few questions</a>.</p>
       </section>
     </main>
 
