@@ -35,19 +35,21 @@
       position:fixed;
       inset:0;
       z-index:-2;
-      background: linear-gradient(90deg, rgba(0,0,0,.12), rgba(0,0,0,0) 60%);
+      background: linear-gradient(90deg, rgba(0,0,0,.25), rgba(0,0,0,0) 55%);
     }
     .bg::before{
       content:"";
       position:absolute;
       inset:-120px;
       background:
-        radial-gradient(800px 520px at 18% 24%, rgba(0,0,0,.22), rgba(0,0,0,0) 60%),
-        radial-gradient(760px 520px at 50% 45%, rgba(0,0,0,.16), rgba(0,0,0,0) 62%),
-        radial-gradient(720px 520px at 78% 40%, rgba(0,0,0,.18), rgba(0,0,0,0) 62%),
-        radial-gradient(900px 600px at 70% 72%, rgba(0,0,0,.12), rgba(0,0,0,0) 65%);
-      filter: blur(32px);
-      opacity:.75;
+        radial-gradient(800px 520px at 18% 24%, rgba(0,0,0,.40), rgba(0,0,0,0) 60%),
+        radial-gradient(760px 520px at 50% 45%, rgba(0,0,0,.22), rgba(0,0,0,0) 62%),
+        radial-gradient(720px 520px at 78% 40%, rgba(0,0,0,.28), rgba(0,0,0,0) 62%),
+        radial-gradient(900px 600px at 70% 72%, rgba(0,0,0,.18), rgba(0,0,0,0) 65%),
+        radial-gradient(520px 420px at 10% 70%, rgba(0,0,0,.14), rgba(0,0,0,0) 70%);
+      filter: blur(28px);
+      transform: scale(1.03);
+      opacity:.95;
     }
     .bg::after{
       /* Grain overlay */
@@ -105,16 +107,15 @@
     .hero::before{
       content:"";
       position:absolute;
-      top: 26%;
+      top: 22%;
       left: -10%;
       right: -10%;
       height: 220px;
-      z-index: 0; /* behind content */
       background-image:
-        url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 300" fill="none"><defs><filter id="glow"><feGaussianBlur stdDeviation="4" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs><path d="M0 160 H180 V70 H280 V260 H420 V120 H520 V160 H700 H900 H1200" stroke="black" stroke-opacity="0.12" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/><path d="M0 160 H180 V70 H280 V260 H420 V120 H520 V160 H700 H900 H1200" stroke="white" stroke-opacity="0.28" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" filter="url(%23glow)"/></svg>');
+        url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 300" fill="none"><defs><filter id="glow"><feGaussianBlur stdDeviation="4" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs><path d="M0 160 H180 V70 H280 V260 H420 V120 H520 V160 H700 H900 H1200" stroke="black" stroke-opacity="0.18" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/><path d="M0 160 H180 V70 H280 V260 H420 V120 H520 V160 H700 H900 H1200" stroke="white" stroke-opacity="0.35" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" filter="url(%23glow)"/></svg>');
       background-repeat:no-repeat;
       background-size:100% 100%;
-      opacity:0.45;
+      opacity:0.6;
       pointer-events:none;
     }
 
@@ -131,7 +132,10 @@
       .visual{order:-1;}
     }
 
-    
+    .hero{
+      max-width: 780px;
+      margin-top: 110px;
+    }
 
     h1{
       margin:0 0 18px;
@@ -257,7 +261,7 @@
     </header>
 
     <main>
-      <section class="hero" style="z-index:1;">
+      <section class="hero">
         <div class="visual">
           <img src="https://framerusercontent.com/images/g0QcWrxr87K0ufOxIUFBakwYA8.png" alt="Neurosecurity abstract visualization" />
         </div>
@@ -278,32 +282,37 @@
     </footer>
   </div>
 
-  <script>
-    const form = document.querySelector('.form');
-    const emailInput = document.querySelector('.field');
+<script>
+  const form = document.querySelector('.form');
+  const emailEl = document.querySelector('.field');
 
-    form.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const email = emailInput.value.trim();
-      if (!email) return;
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
 
-      try {
-        const res = await fetch('/api/subscribe', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email, source: 'cerberus-landing' })
-        });
+    const email = emailEl.value.trim();
+    if (!email) return;
 
-        if (res.ok) {
-          alert('Thanks — you’ll hear from us when we publish or launch.');
-          emailInput.value = '';
-        } else {
-          alert('Subscription failed. Please try again.');
-        }
-      } catch (err) {
-        alert('Network error. Please try again later.');
+    try {
+      const res = await fetch("/api/subscribe", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email,
+          source: "cerberus-landing"
+        })
+      });
+
+      if (res.ok) {
+        alert("Thanks — you’ll hear from us when we publish or launch.");
+        emailEl.value = "";
+      } else {
+        alert("Something went wrong. Try again.");
       }
-    });
-  </script>
+    } catch (err) {
+      alert("Network error. Try again.");
+    }
+  });
+</script>
+
 </body>
 </html>
