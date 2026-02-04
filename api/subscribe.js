@@ -60,7 +60,7 @@ export default async function handler(req, res) {
 
     await client.end();
 
-    return res.status(200).json({ ok: true });
+    return res.status(200).json({ ok: true, wrote: true });;
   } catch (err) {
     console.error("subscribe error:", err);
     return res.status(500).json({ error: "Server error" });
