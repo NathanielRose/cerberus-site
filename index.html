@@ -282,15 +282,37 @@
     </footer>
   </div>
 
-  <script>
-    // Tiny demo behavior so the button does something
-    const form = document.querySelector('.form');
-    const email = document.querySelector('.field');
-    form.addEventListener('submit', () => {
-      if (!email.value) return;
-      alert(`Thanks — you’ll hear from us when we publish or launch.`);
-      email.value = '';
-    });
-  </script>
+<script>
+  const form = document.querySelector('.form');
+  const emailEl = document.querySelector('.field');
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const email = emailEl.value.trim();
+    if (!email) return;
+
+    try {
+      const res = await fetch("/api/subscribe", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email,
+          source: "cerberus-landing"
+        })
+      });
+
+      if (res.ok) {
+        alert("Thanks — you’ll hear from us when we publish or launch.");
+        emailEl.value = "";
+      } else {
+        alert("Something went wrong. Try again.");
+      }
+    } catch (err) {
+      alert("Network error. Try again.");
+    }
+  });
+</script>
+
 </body>
 </html>
