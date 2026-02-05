@@ -144,8 +144,6 @@
       .visual{order:-1;}
     }
 
-    /* removed duplicate hero override */
-
     h1{
       margin:0 0 10px; /* tighter gap above form */
       font-family: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
@@ -237,7 +235,6 @@
       background: none;
     }
 
-    /* Subtle left “panel” shadow like the reference */
     .leftFade{
       position:fixed;
       inset:0;
@@ -248,7 +245,6 @@
       opacity:.75;
     }
 
-    /* Responsive */
     @media (max-width: 900px){
       .wrap{padding: 38px 28px 22px;}
       .hero{margin-top: 72px;}
@@ -277,21 +273,22 @@
         <div class="visual">
           <img src="https://framerusercontent.com/images/g0QcWrxr87K0ufOxIUFBakwYA8.png" alt="Neurosecurity abstract visualization" />
         </div>
+
         <div>
-        <h1>NEUROSECURITY<br/>RESEARCH INSTITUTE</h1>
-        <p class="sub">A nonprofit research institute securing brain–computer interfaces and neural data.</p>
+          <h1>NEUROSECURITY<br/>RESEARCH INSTITUTE</h1>
+          <p class="sub">A nonprofit research institute securing brain–computer interfaces and neural data.</p>
 
-        
-
-        
-
-                <form class="form" onsubmit="return false;">
-          <input class="field" type="email" placeholder="Enter your email" required />
-          <button class="btn" type="submit">Follow our research</button>
-        </form>
+          <!-- ✅ removed onsubmit="return false;" -->
+          <form class="form">
+            <input class="field" type="email" placeholder="Enter your email" required />
+            <button class="btn" type="submit">Follow our research</button>
+          </form>
         </div>
 
-        <p class="helper" style="margin-top:-6px;">Interested in contributing to research?<br/><a href="https://form.typeform.com/to/AD2X5ode" target="_blank" rel="noopener noreferrer">Answer a few questions</a>.</p>
+        <p class="helper" style="margin-top:-6px;">
+          Interested in contributing to research?<br/>
+          <a href="https://form.typeform.com/to/AD2X5ode" target="_blank" rel="noopener noreferrer">Answer a few questions</a>.
+        </p>
       </section>
     </main>
 
@@ -301,13 +298,46 @@
   </div>
 
   <script>
-    // Tiny demo behavior so the button does something
-    const form = document.querySelector('.form');
-    const email = document.querySelector('.field');
-    form.addEventListener('submit', () => {
-      if (!email.value) return;
-      alert(`Thanks — you’ll hear from us when we publish or launch.`);
-      email.value = '';
+    // Real subscribe behavior: POST to /api/subscribe
+    window.addEventListener("DOMContentLoaded", () => {
+      const form = document.querySelector(".form");
+      const emailEl = document.querySelector(".field");
+      const btn = document.querySelector(".btn");
+
+      if (!form || !emailEl) return;
+
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        const email = emailEl.value.trim();
+        if (!email) return;
+
+        const prev = btn.textContent;
+        btn.disabled = true;
+        btn.textContent = "Submitting...";
+
+        try {
+          const res = await fetch("/api/subscribe", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email, source: "cerberus-landing" })
+          });
+
+          const text = await res.text(); // keep raw for debugging
+          if (!res.ok) {
+            alert(`Subscribe failed (${res.status})\n${text}`);
+            return;
+          }
+
+          alert("Thanks — you’ll hear from us when we publish or launch.");
+          emailEl.value = "";
+        } catch (err) {
+          alert("Network error. Try again.");
+        } finally {
+          btn.disabled = false;
+          btn.textContent = prev;
+        }
+      });
     });
   </script>
 </body>
