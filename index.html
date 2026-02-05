@@ -11,7 +11,6 @@
     :root{
       --bg:#d4d2cd;
       --text:#0f0f10;
-      --btn:#2f2f31;
       --btnText:#ffffff;
       --fieldBorder: rgba(0,0,0,.12);
     }
@@ -24,41 +23,31 @@
       background: var(--bg);
       font-family: 'IBM Plex Sans', system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
       letter-spacing: -0.01em;
-      overflow:hidden;
+      overflow-x:hidden;
+      /* Allow vertical overflow on small-height viewports (iPad landscape, etc.) */
+      overflow-y:auto;
     }
 
-    .bg{
-      position:fixed;
-      inset:0;
-      z-index:-2;
-      background: linear-gradient(90deg, rgba(0,0,0,.25), rgba(0,0,0,0) 55%);
-    }
-
+    /* Full-page animated background */
     #vanta-bg{
       position:fixed;
       inset:0;
       z-index:-1;
       opacity:0.9;
+      pointer-events:none;
     }
 
     .wrap{
-      min-height:100vh;
+      min-height:100dvh; /* mobile-safe viewport */
       display:flex;
       flex-direction:column;
-      padding: 48px 64px 24px;
+      padding: clamp(18px, 4vw, 48px) clamp(18px, 5vw, 64px) clamp(16px, 3vw, 24px);
+      gap: 10px;
     }
 
-    header{
-      position:relative;
-      display:flex;
-      align-items:center;
-      gap:12px;
-      min-height:120px;
-      overflow:hidden;
-    }
+    header{display:flex; align-items:center;}
 
     .logo{
-      font-family: 'IBM Plex Sans', system-ui, sans-serif;
       font-weight:600;
       font-size:42px;
       line-height:1;
@@ -72,21 +61,16 @@
       flex:1;
       display:flex;
       align-items:center;
+      justify-content:flex-start;
     }
 
     .hero{
-      position: relative;
-      isolation: isolate;
       display:grid;
       grid-template-columns: 400px 1fr;
       gap: 48px;
       max-width: 1180px;
-      margin-top: 56px;
-    }
-
-    .hero > *{
-      position: relative;
-      z-index: 1;
+      width: 100%;
+      margin: 0;
     }
 
     .visual img{
@@ -100,22 +84,17 @@
       image-rendering: auto;
     }
 
-    @media (max-width: 900px){
-      .hero{grid-template-columns: 1fr;}
-      .visual{order:-1;}
-    }
-
     h1{
       margin:0 0 10px;
       font-family: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-      font-size: clamp(52px, 5.8vw, 88px);
+      font-size: clamp(44px, 5.3vw, 88px);
       line-height: 1.12;
       font-weight: 500;
       letter-spacing: 0.02em;
     }
 
     .sub{
-      margin:0 0 44px;
+      margin:0 0 34px;
       font-size: 13px;
       letter-spacing: 0.18em;
       text-transform: uppercase;
@@ -141,7 +120,6 @@
       padding: 0 16px;
       outline: none;
       font-size: 14px;
-      font-family: 'IBM Plex Sans', system-ui, sans-serif;
       color: rgba(0,0,0,.75);
       backdrop-filter: blur(8px);
       text-align: center;
@@ -152,7 +130,6 @@
       text-transform: uppercase;
       letter-spacing: 0.10em;
       font-size: 12px;
-      text-align: center;
     }
 
     .btn{
@@ -161,7 +138,6 @@
       border: 0;
       background: rgba(0,0,0,.72);
       color: var(--btnText);
-      font-family: 'IBM Plex Sans', system-ui, sans-serif;
       font-weight: 600;
       letter-spacing: 0.12em;
       text-transform: uppercase;
@@ -172,46 +148,49 @@
 
     .btn:hover{filter: brightness(1.06)}
     .btn:active{transform: translateY(1px)}
+    .btn:disabled{opacity:.75; cursor:not-allowed}
 
     .helper{
       margin: 12px 0 0;
       font-size: 14px;
       color: rgba(0,0,0,.70);
       text-align: center;
-      max-width: 340px;
+      max-width: 360px;
     }
 
-    .helper a{
-      color: inherit;
-      text-decoration: underline;
-      text-underline-offset: 3px;
-    }
+    .helper a{color: inherit; text-decoration: underline; text-underline-offset: 3px;}
 
     footer{
       text-align:center;
       font-size: 14px;
       color: rgba(0,0,0,.62);
       padding-top: 12px;
-      margin-top: 0;
-      background: none;
     }
 
+    /* Responsive */
     @media (max-width: 900px){
-      .wrap{padding: 38px 28px 22px;}
-      .hero{margin-top: 72px;}
+      main{align-items:flex-start;}
+      .hero{grid-template-columns: 1fr; gap: 24px;}
+      .visual{order:-1;}
       .form{width:min(360px, 100%);}
+      footer{padding-top: 8px;}
+    }
+
+    /* Small height screens (iPad landscape / short viewports): allow natural flow */
+    @media (max-height: 740px){
+      main{align-items:flex-start;}
+      .sub{margin-bottom: 22px;}
     }
 
     @media (max-width: 520px){
       .logo{font-size: 36px;}
-      .hero{margin-top: 56px;}
-      .sub{margin-bottom: 28px; font-size:12px;}
+      h1{font-size: clamp(38px, 9vw, 60px);}
+      .sub{margin-bottom: 22px; font-size:12px;}
       .form{width:100%;}
     }
   </style>
 </head>
 <body>
-  <div class="bg" aria-hidden="true"></div>
   <div id="vanta-bg" aria-hidden="true"></div>
 
   <div class="wrap">
@@ -234,8 +213,8 @@
           <p class="sub">A nonprofit research institute securing brain–computer interfaces and neural data.</p>
 
           <form class="form">
-            <input class="field w-full h-[42px] rounded-xl border px-4 outline-none text-sm text-center backdrop-blur-md transition-all duration-200 focus:ring-2 focus:ring-foreground/20" type="email" placeholder="Enter your email" required />
-            <button class="btn w-full h-[42px] rounded-xl border-0 font-semibold text-sm tracking-[0.12em] uppercase cursor-pointer transition-all duration-200 disabled:opacity-70" type="submit">Follow our research</button>
+            <input class="field" type="email" placeholder="Enter your email" required />
+            <button class="btn" type="submit">Follow our research</button>
           </form>
         </div>
       </section>
@@ -247,23 +226,21 @@
   </div>
 
   <script>
-    // Real subscribe behavior: POST to /api/subscribe
     window.addEventListener("DOMContentLoaded", () => {
       const form = document.querySelector(".form");
       const emailEl = document.querySelector(".field");
       const btn = document.querySelector(".btn");
 
-      if (!form || !emailEl) return;
+      if (!form || !emailEl || !btn) return;
 
       form.addEventListener("submit", async (e) => {
         e.preventDefault();
-
         const email = emailEl.value.trim();
         if (!email) return;
 
         const prev = btn.textContent;
         btn.disabled = true;
-        btn.textContent = "Submitting...";
+        btn.textContent = "Submitting…";
 
         try {
           const res = await fetch("/api/subscribe", {
@@ -272,9 +249,10 @@
             body: JSON.stringify({ email, source: "cerberus-landing" })
           });
 
-          const text = await res.text(); // keep raw for debugging
+          const text = await res.text();
           if (!res.ok) {
-            alert(`Subscribe failed (${res.status})\n${text}`);
+            alert(`Subscribe failed (${res.status})
+${text}`);
             return;
           }
 
@@ -290,28 +268,26 @@
     });
   </script>
 
-  <!-- VANTA background -->
   <script src="https://cdn.jsdelivr.net/npm/three@0.134.0/build/three.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.net.min.js"></script>
   <script>
     window.addEventListener("DOMContentLoaded", () => {
-      if (window.VANTA) {
-        VANTA.NET({
-          el: "#vanta-bg",
-          mouseControls: true,
-          touchControls: true,
-          gyroControls: false,
-          minHeight: 200,
-          minWidth: 200,
-          scale: 1.0,
-          scaleMobile: 1.0,
-          color: 0xd1cecf,
-          backgroundColor: 0xd4d2cd,
-          points: 18.0,
-          maxDistance: 32.0,
-          spacing: 14.0
-        });
-      }
+      if (!window.VANTA) return;
+      VANTA.NET({
+        el: "#vanta-bg",
+        mouseControls: true,
+        touchControls: true,
+        gyroControls: false,
+        minHeight: 200,
+        minWidth: 200,
+        scale: 1.0,
+        scaleMobile: 1.0,
+        color: 0xd1cecf,
+        backgroundColor: 0xd4d2cd,
+        points: 18.0,
+        maxDistance: 32.0,
+        spacing: 14.0
+      });
     });
   </script>
 </body>
