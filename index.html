@@ -13,6 +13,25 @@
   <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
   <meta name="apple-mobile-web-app-title" content="MyWebSite" />
   <link rel="manifest" href="/site.webmanifest" />
+  <!-- Primary Meta Tags -->
+  <meta name="title" content="CERBERUS Neurosecurity Research Institute" />
+  <meta name="description" content="CERBERUS is a nonprofit neurosecurity research institute securing brain–computer interfaces and neural data." />
+  <meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1" />
+  <link rel="canonical" href="https://cerberus.institute/" />
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="CERBERUS — Neurosecurity Research Institute" />
+  <meta property="og:description" content="A nonprofit research institute securing brain–computer interfaces and neural data." />
+  <meta property="og:url" content="https://cerberus.institute/" />
+  <meta property="og:image" content="https://cerberus.institute/og.png" />
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="CERBERUS — Neurosecurity Research Institute" />
+  <meta name="twitter:description" content="A nonprofit research institute securing brain–computer interfaces and neural data." />
+  <meta name="twitter:image" content="https://cerberus.institute/og.png" />
+
   <style>
     :root{
       --bg:#d4d2cd;
@@ -195,6 +214,33 @@
       .form{width:100%;}
     }
   </style>
+
+  <!-- JSON-LD structured data -->
+  <script type="application/ld+json">
+  {
+    "@context":"https://schema.org",
+    "@type":"Organization",
+    "name":"CERBERUS Neurosecurity Research Institute",
+    "url":"https://cerberus.institute/",
+    "description":"A nonprofit research institute securing brain–computer interfaces and neural data.",
+    "sameAs":[]
+  }
+  </script>
+
+  <script type="application/ld+json">
+  {
+    "@context":"https://schema.org",
+    "@type":"WebSite",
+    "name":"CERBERUS",
+    "url":"https://cerberus.institute/",
+    "potentialAction":{
+      "@type":"SearchAction",
+      "target":"https://cerberus.institute/?q={search_term_string}",
+      "query-input":"required name=search_term_string"
+    }
+  }
+  </script>
+
 </head>
 <body>
   <div id="vanta-bg" aria-hidden="true"></div>
