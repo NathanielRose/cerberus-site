@@ -1,6 +1,6 @@
 # CERBERUS — Neurosecurity Research Institute
 URL: https://cerberus.institute/
-Description: A nonprofit research institute securing brain–computer interfaces and neural data.
+Description: A nonprofit research institute advancing open research, standards, and defenses for the neurotechnology era.
 
 ## Focus Areas
 - Information Transit Defence & BCI Security
